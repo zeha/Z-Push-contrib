@@ -234,7 +234,7 @@ include_once('version.php');
     }
 
     catch (NoPostRequestException $nopostex) {
-        if ($nopostex->getCode() == NoPostRequestException::OPTIONS_REQUEST) {
+        if ($nopostex->getCode() == NoPostRequestException::OPTIONS_REQUEST || Request::GetCommand() == 'OPTIONS') {
             header(ZPush::GetServerHeader());
             header(ZPush::GetSupportedProtocolVersions());
             header(ZPush::GetSupportedCommands());

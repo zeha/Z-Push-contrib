@@ -312,7 +312,17 @@ class carddav_backend
     public function get($include_vcards = true, $raw = false)
     {
 //         ZLog::Write(LOGLEVEL_DEBUG, sprintf("BackendCardDAV->carddav_backend->get"));
-        $result = $this->query($this->url, 'PROPFIND');
+	$propfind_body= <<<PROPFIND_BODY
+<?xml version="1.0" encoding="utf-8" ?>
+<A:propfind xmlns:A="DAV:">
+    <A:prop>
+        <A:displayname/>
+        <A:resourcetype/>
+    </A:prop>
+</A:propfind>
+PROPFIND_BODY;
+        $result = $this->query($this->url, 'PROPFIND', $propfind_body, "application/xml");
+
 
         switch ($result['http_code'])
         {
@@ -759,7 +769,7 @@ EOFXMLGETXMLVCARD;
 
             if ($this->auth !== null)
             {
-                curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+                curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
                 curl_setopt($this->curl, CURLOPT_USERPWD, $this->auth);
             }
         }
@@ -782,6 +792,7 @@ EOFXMLGETXMLVCARD;
 
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
 
         if ($content !== null)
         {
@@ -796,11 +807,11 @@ EOFXMLGETXMLVCARD;
 
         if ($content_type !== null)
         {
-            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-type: '.$content_type, 'Depth: infinity'));
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-type: '.$content_type, 'Depth: 1'));
         }
         else
         {
-            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Depth: infinity'));
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Depth: 1'));
         }
 
         $complete_response	= curl_exec($this->curl);

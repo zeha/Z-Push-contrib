@@ -98,7 +98,7 @@ class BackendCardDAV extends BackendDiff implements ISearchProvider {
             $this->domain = $domain;
         }
         else {
-            ZLog::Write(LOGLEVEL_ERROR, sprintf("BackendCardDAV->Logon(): User '%s' failed to authenticate on '%s': %s", $username, $url));
+            ZLog::Write(LOGLEVEL_ERROR, sprintf("BackendCardDAV->Logon(): User '%s' failed to authenticate on '%s'", $username, $url));
             $this->server = null;
             //TODO: get error message
         }

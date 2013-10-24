@@ -58,7 +58,7 @@ define('CARDDAV_PORT', '443');
 // %u: replaced with the username
 // %d: replaced with the domain
 //   Add the trailing /
-define('CARDDAV_PATH', '/caldav.php/%u/addresses/');
+define('CARDDAV_PATH', '/addressbooks/users/%u/addressbook/');
 
 // Addressbook display name
 // %u: replaced with the username
